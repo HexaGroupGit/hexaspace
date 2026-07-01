@@ -24,9 +24,12 @@ import BookingFlow from './BookingFlow';
 
 const HOUR_H = 62;
 const HEADER_H = 144;
+const ALLDAY_H = 36;
 const HOURS = Array.from({ length: DAY_END - DAY_START }, (_, i) => DAY_START + i);
+// Gridline labels — one per line including the closing hour (so 5 PM shows).
+const LABEL_HOURS = Array.from({ length: DAY_END - DAY_START + 1 }, (_, i) => DAY_START + i);
 
-type Slot = { resource: BookableResource; date: string; startTime: string; endTime: string };
+type Slot = { resource: BookableResource; date: string; startTime: string; endTime: string; allDay?: boolean };
 
 export default function BookingCalendar({ initialTab = 'meeting' }: { initialTab?: BookableGroup }) {
   const [tab, setTab] = useState<BookableGroup>(initialTab);
@@ -101,6 +104,16 @@ export default function BookingCalendar({ initialTab = 'meeting' }: { initialTab
     });
   }
 
+  function openAllDay(resource: BookableResource) {
+    setSlot({
+      resource,
+      date: dayStr,
+      startTime: fromDec(DAY_START),
+      endTime: fromDec(DAY_END),
+      allDay: true,
+    });
+  }
+
   const isToday = ymd(new Date()) === dayStr;
 
   return (
@@ -159,15 +172,21 @@ export default function BookingCalendar({ initialTab = 'meeting' }: { initialTab
           {/* Time gutter */}
           <div className="w-16 shrink-0 border-r border-ink/10">
             <div style={{ height: HEADER_H }} className="border-b border-ink/10" />
-            {HOURS.map((h) => (
-              <div
-                key={h}
-                style={{ height: HOUR_H }}
-                className="font-heading uppercase tracking-nav text-[9px] text-muted text-right pr-2 -mt-1.5"
-              >
-                {hourLabel(h)}
-              </div>
-            ))}
+            <div style={{ height: ALLDAY_H }} className="border-b border-ink/10 flex items-center justify-end pr-2">
+              <span className="font-heading uppercase tracking-nav text-[9px] text-muted">All day</span>
+            </div>
+            {/* Hour labels anchored to each gridline (9 AM … 5 PM) */}
+            <div className="relative" style={{ height: HOURS.length * HOUR_H }}>
+              {LABEL_HOURS.map((h) => (
+                <span
+                  key={h}
+                  style={{ top: (h - DAY_START) * HOUR_H }}
+                  className="absolute right-2 -translate-y-1/2 font-heading uppercase tracking-nav text-[9px] text-muted"
+                >
+                  {hourLabel(h)}
+                </span>
+              ))}
+            </div>
           </div>
 
           {/* Resource columns */}
@@ -202,6 +221,30 @@ export default function BookingCalendar({ initialTab = 'meeting' }: { initialTab
                     </div>
                   </div>
                 </div>
+
+                {/* All-day cell — books the whole day (9–5) at 30% off */}
+                {(() => {
+                  const busy = roomBookings.some((b) => b.status !== 'Cancelled');
+                  return (
+                    <button
+                      type="button"
+                      disabled={busy}
+                      onClick={() => openAllDay(room)}
+                      style={{ height: ALLDAY_H }}
+                      className={`block w-full border-b border-ink/10 transition-colors ${
+                        busy ? 'cursor-default' : 'hover:bg-hexa-green/5 cursor-pointer'
+                      }`}
+                    >
+                      <span
+                        className={`font-heading uppercase tracking-nav text-[8.5px] ${
+                          busy ? 'text-muted/40' : 'text-hexa-green'
+                        }`}
+                      >
+                        {busy ? '—' : 'All day · 30% off'}
+                      </span>
+                    </button>
+                  );
+                })()}
 
                 {/* Hour grid */}
                 <div className="relative" style={{ height: HOURS.length * HOUR_H }}>
@@ -252,6 +295,7 @@ export default function BookingCalendar({ initialTab = 'meeting' }: { initialTab
           date={slot.date}
           startTime={slot.startTime}
           endTime={slot.endTime}
+          allDay={slot.allDay}
           existing={bookings}
           onClose={() => setSlot(null)}
           onBooked={(b) =>

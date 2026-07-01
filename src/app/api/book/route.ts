@@ -32,6 +32,7 @@ export async function POST(req: NextRequest) {
   const email = str(body.email);
   const phone = str(body.phone);
   const company = str(body.company);
+  const allDay = body.allDay === true;
 
   if (!name || !email) return NextResponse.json({ error: 'Name and email are required.' }, { status: 400 });
   if (!/^\d{4}-\d{2}-\d{2}$/.test(date)) return NextResponse.json({ error: 'Invalid date.' }, { status: 400 });
@@ -45,7 +46,10 @@ export async function POST(req: NextRequest) {
   if (!resource) return NextResponse.json({ error: 'Unknown room.' }, { status: 400 });
 
   const hours = toDec(endTime) - toDec(startTime);
-  const fee = resource.rate != null ? Math.round(resource.rate * hours * 100) / 100 : 0;
+  // All-day public bookings get 30% off.
+  const ALL_DAY_DISCOUNT = 0.3;
+  const rawFee = resource.rate != null ? resource.rate * hours : 0;
+  const fee = Math.round(rawFee * (allDay ? 1 - ALL_DAY_DISCOUNT : 1) * 100) / 100;
   const now = new Date().toISOString();
   const reference = ref();
 
@@ -112,7 +116,7 @@ export async function POST(req: NextRequest) {
       date,
       startTime,
       endTime,
-      allDay: false,
+      allDay,
       status: 'Pending',
       source: 'Website',
       paidBy: 'unpaid',

@@ -16,6 +16,7 @@ import {
 
 const MEMBERS_URL = 'https://members.hexaspace.com.au';
 const STEPS = ['Booking', 'Your details', 'Payment', 'Confirmed'] as const;
+const ALL_DAY_DISCOUNT = 0.3; // 30% off all-day public bookings
 
 // Selectable half-hourly times across operating hours.
 const TIME_OPTIONS = (() => {
@@ -29,6 +30,7 @@ type Props = {
   date: string;
   startTime: string;
   endTime: string;
+  allDay?: boolean;
   existing: AvailabilityBooking[];
   onClose: () => void;
   onBooked: (b: { resourceId: string; date: string; startTime: string; endTime: string }) => void;
@@ -39,6 +41,7 @@ export default function BookingFlow({
   date,
   startTime,
   endTime,
+  allDay = false,
   existing,
   onClose,
   onBooked,
@@ -65,7 +68,9 @@ export default function BookingFlow({
     setForm((f) => ({ ...f, [k]: e.target.value }));
 
   const dur = Math.max(0, toDec(form.endTime) - toDec(form.startTime));
-  const total = resource.rate != null ? resource.rate * dur : null;
+  const gross = resource.rate != null ? resource.rate * dur : null;
+  const total =
+    gross != null && allDay ? Math.round(gross * (1 - ALL_DAY_DISCOUNT) * 100) / 100 : gross;
 
   const clash = useMemo(
     () =>
@@ -123,6 +128,7 @@ export default function BookingFlow({
           date: form.date,
           startTime: form.startTime,
           endTime: form.endTime,
+          allDay,
           title: form.title,
           description: form.description,
           name: form.name,
@@ -180,20 +186,32 @@ export default function BookingFlow({
                   <Labeled label="Date">
                     <input type="date" value={form.date} onChange={set('date')} className={inputCls} />
                   </Labeled>
-                  <Labeled label="From">
-                    <select value={form.startTime} onChange={set('startTime')} className={inputCls}>
-                      {TIME_OPTIONS.map((t) => (
-                        <option key={t} value={t}>{timeLabel(t)}</option>
-                      ))}
-                    </select>
-                  </Labeled>
-                  <Labeled label="To">
-                    <select value={form.endTime} onChange={set('endTime')} className={inputCls}>
-                      {TIME_OPTIONS.map((t) => (
-                        <option key={t} value={t}>{timeLabel(t)}</option>
-                      ))}
-                    </select>
-                  </Labeled>
+                  {allDay ? (
+                    <div className="sm:col-span-2">
+                      <span className="eyebrow">Session</span>
+                      <div className={`${inputCls} flex items-center justify-between`}>
+                        <span>All day · {timeLabel('09:00')} – {timeLabel('17:00')}</span>
+                        <span className="font-heading uppercase tracking-nav text-[10px] text-hexa-green">30% off</span>
+                      </div>
+                    </div>
+                  ) : (
+                    <>
+                      <Labeled label="From">
+                        <select value={form.startTime} onChange={set('startTime')} className={inputCls}>
+                          {TIME_OPTIONS.map((t) => (
+                            <option key={t} value={t}>{timeLabel(t)}</option>
+                          ))}
+                        </select>
+                      </Labeled>
+                      <Labeled label="To">
+                        <select value={form.endTime} onChange={set('endTime')} className={inputCls}>
+                          {TIME_OPTIONS.map((t) => (
+                            <option key={t} value={t}>{timeLabel(t)}</option>
+                          ))}
+                        </select>
+                      </Labeled>
+                    </>
+                  )}
                 </div>
                 <Labeled label="Title (optional)">
                   <input value={form.title} onChange={set('title')} placeholder="e.g. Client meeting" className={inputCls} />
@@ -205,7 +223,7 @@ export default function BookingFlow({
             </div>
 
             {/* Summary */}
-            <Summary resource={resource} form={form} dur={dur} total={total} />
+            <Summary resource={resource} form={form} dur={dur} gross={gross} total={total} allDay={allDay} />
           </div>
         )}
 
@@ -231,7 +249,7 @@ export default function BookingFlow({
                 </Labeled>
               </div>
             </div>
-            <Summary resource={resource} form={form} dur={dur} total={total} />
+            <Summary resource={resource} form={form} dur={dur} gross={gross} total={total} allDay={allDay} />
           </div>
         )}
 
@@ -279,7 +297,7 @@ export default function BookingFlow({
                 </div>
               </div>
             </div>
-            <Summary resource={resource} form={form} dur={dur} total={total} showPolicy />
+            <Summary resource={resource} form={form} dur={dur} gross={gross} total={total} allDay={allDay} showPolicy />
           </div>
         )}
 
@@ -360,15 +378,20 @@ function Summary({
   resource,
   form,
   dur,
+  gross,
   total,
+  allDay,
   showPolicy,
 }: {
   resource: BookableResource;
   form: { date: string; startTime: string; endTime: string };
   dur: number;
+  gross: number | null;
   total: number | null;
+  allDay?: boolean;
   showPolicy?: boolean;
 }) {
+  const saved = allDay && gross != null && total != null ? gross - total : 0;
   return (
     <aside className="border border-ink/10 p-7 md:p-8 self-start">
       <h3 className="font-display font-extralight text-2xl">Booking summary</h3>
@@ -379,7 +402,16 @@ function Summary({
         <Row label="Space" value={resource.name} />
         <Row label="Date" value={longDate(new Date(form.date + 'T00:00:00'))} />
         <Row label="Time" value={`${timeLabel(form.startTime)} – ${timeLabel(form.endTime)}`} />
-        <Row label="Duration" value={dur > 0 ? `${dur} hour${dur === 1 ? '' : 's'}` : '—'} />
+        <Row label="Duration" value={allDay ? 'All day (9 AM – 5 PM)' : dur > 0 ? `${dur} hour${dur === 1 ? '' : 's'}` : '—'} />
+        {allDay && gross != null && (
+          <>
+            <Row label="Rate" value={`A$${gross.toFixed(2)}`} />
+            <div className="flex items-start justify-between gap-4">
+              <span className="eyebrow shrink-0 text-hexa-green">All-day discount</span>
+              <span className="font-body text-hexa-green text-right">−30% (−A${saved.toFixed(2)})</span>
+            </div>
+          </>
+        )}
         <div className="border-t border-ink/10 pt-4 flex items-baseline justify-between">
           <span className="eyebrow">Total</span>
           <span className="font-display font-extralight text-2xl">
