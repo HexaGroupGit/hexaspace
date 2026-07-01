@@ -9,8 +9,8 @@ const TOUR_STAGE = {
   id: 'stage_tour_booked',
   name: 'Tour Booked',
   tone: 'orange',
-  sortOrder: 0.5,
-  category: 'engaged',
+  sortOrder: 2, // sits in the middle: New(0) · Contacted(1) · Tour Booked(2) · Won(3) · Lost(4)
+  category: 'in-progress',
 };
 
 const TOUR_NOTIFY = 'eric@hexaspace.com.au';
