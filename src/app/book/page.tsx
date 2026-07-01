@@ -16,7 +16,7 @@ export default async function BookPage({
   const initialTab = tab === 'studio' ? 'studio' : 'meeting';
   return (
     <main className="pt-20">
-      <section className="container-page py-12 md:py-16">
+      <section className="mx-auto w-full max-w-[1600px] px-6 md:px-10 lg:px-14 py-12 md:py-16">
         <BookingCalendar initialTab={initialTab} />
       </section>
     </main>

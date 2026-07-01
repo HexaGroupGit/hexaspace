@@ -167,7 +167,7 @@ export default function BookingCalendar({ initialTab = 'meeting' }: { initialTab
       </div>
 
       {/* Calendar grid */}
-      <div className="mt-8 border border-ink/10 bg-paper overflow-x-auto">
+      <div className="mt-8 border border-ink/10 bg-paper">
         <div className="flex">
           {/* Time gutter */}
           <div className="w-16 shrink-0 border-r border-ink/10">
@@ -175,13 +175,13 @@ export default function BookingCalendar({ initialTab = 'meeting' }: { initialTab
             <div style={{ height: ALLDAY_H }} className="border-b border-ink/10 flex items-center justify-end pr-2">
               <span className="font-heading uppercase tracking-nav text-[9px] text-muted">All day</span>
             </div>
-            {/* Hour labels anchored to each gridline (9 AM … 5 PM) */}
-            <div className="relative" style={{ height: HOURS.length * HOUR_H }}>
+            {/* Hour labels sit just below each gridline; +1 row gives 5 PM a box under it */}
+            <div className="relative" style={{ height: (HOURS.length + 1) * HOUR_H }}>
               {LABEL_HOURS.map((h) => (
                 <span
                   key={h}
-                  style={{ top: (h - DAY_START) * HOUR_H }}
-                  className="absolute right-2 -translate-y-1/2 font-heading uppercase tracking-nav text-[9px] text-muted"
+                  style={{ top: (h - DAY_START) * HOUR_H + 4 }}
+                  className="absolute right-2 font-heading uppercase tracking-nav text-[9px] text-muted"
                 >
                   {hourLabel(h)}
                 </span>
@@ -193,7 +193,7 @@ export default function BookingCalendar({ initialTab = 'meeting' }: { initialTab
           {resources.map((room) => {
             const roomBookings = bookings.filter((b) => b.resourceId === room.id && b.date === dayStr);
             return (
-              <div key={room.id} className="flex-1 min-w-[164px] border-r border-ink/10 last:border-r-0">
+              <div key={room.id} className="flex-1 min-w-0 border-r border-ink/10 last:border-r-0">
                 {/* Column header — photo, name, pax, rate */}
                 <div style={{ height: HEADER_H }} className="border-b border-ink/10 border-t-2 border-t-hexa-green">
                   <div className="relative h-[92px] w-full overflow-hidden">
@@ -246,8 +246,8 @@ export default function BookingCalendar({ initialTab = 'meeting' }: { initialTab
                   );
                 })()}
 
-                {/* Hour grid */}
-                <div className="relative" style={{ height: HOURS.length * HOUR_H }}>
+                {/* Hour grid — +1 trailing box so the 5 PM line has a cell beneath it */}
+                <div className="relative" style={{ height: (HOURS.length + 1) * HOUR_H }}>
                   {HOURS.map((h) => {
                     const taken = isTaken(room.id, h);
                     return (
@@ -263,6 +263,8 @@ export default function BookingCalendar({ initialTab = 'meeting' }: { initialTab
                       />
                     );
                   })}
+                  {/* trailing box under 5 PM (not bookable) */}
+                  <div style={{ height: HOUR_H }} className="border-b border-ink/5" />
 
                   {/* Existing bookings — blocked */}
                   {roomBookings.map((b, i) => {
