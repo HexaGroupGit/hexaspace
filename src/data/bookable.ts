@@ -74,6 +74,6 @@ export const BOOKABLE_TABS: { key: BookableGroup; label: string }[] = [
   { key: 'studio', label: 'Studios' },
 ];
 
-/** Operating hours shown on the calendar (matches the RND portal: 8am–7pm). */
-export const DAY_START = 8;
-export const DAY_END = 19;
+/** Operating hours shown on the calendar (matches the RND portal: 9am–5pm). */
+export const DAY_START = 9;
+export const DAY_END = 17;
