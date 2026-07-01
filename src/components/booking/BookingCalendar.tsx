@@ -23,7 +23,6 @@ import {
 import BookingFlow from './BookingFlow';
 
 const HOUR_H = 62;
-const HEADER_H = 144;
 const ALLDAY_H = 36;
 const HOURS = Array.from({ length: DAY_END - DAY_START }, (_, i) => DAY_START + i);
 // Gridline labels — one per line including the closing hour (so 5 PM shows).
@@ -41,6 +40,11 @@ export default function BookingCalendar({ initialTab = 'meeting' }: { initialTab
 
   const dayStr = ymd(day);
   const resources = useMemo(() => allResources.filter((r) => r.group === tab), [allResources, tab]);
+
+  // Photo size: studios show as 2 wide columns, so give them a much taller image.
+  // Header box stays a fixed height (photo + text) so it never scrolls.
+  const photoH = tab === 'studio' ? 220 : 112;
+  const headerH = photoH + 52;
 
   // Source the live bookable rooms/studios from the RND; fall back to the static
   // list (so the calendar still renders if the RND env isn't wired in this env).
@@ -171,7 +175,7 @@ export default function BookingCalendar({ initialTab = 'meeting' }: { initialTab
         <div className="flex">
           {/* Time gutter */}
           <div className="w-16 shrink-0 border-r border-ink/10">
-            <div style={{ height: HEADER_H }} className="border-b border-ink/10" />
+            <div style={{ height: headerH }} className="border-b border-ink/10" />
             <div style={{ height: ALLDAY_H }} className="border-b border-ink/10 flex items-center justify-end pr-2">
               <span className="font-heading uppercase tracking-nav text-[9px] text-muted">All day</span>
             </div>
@@ -195,13 +199,13 @@ export default function BookingCalendar({ initialTab = 'meeting' }: { initialTab
             return (
               <div key={room.id} className="flex-1 min-w-0 border-r border-ink/10 last:border-r-0">
                 {/* Column header — photo, name, pax, rate */}
-                <div style={{ height: HEADER_H }} className="border-b border-ink/10 border-t-2 border-t-hexa-green">
-                  <div className="relative h-[92px] w-full overflow-hidden">
+                <div style={{ height: headerH }} className="border-b border-ink/10 border-t-2 border-t-hexa-green">
+                  <div style={{ height: photoH }} className="relative w-full overflow-hidden">
                     <Image
                       src={room.image}
                       alt={room.name}
                       fill
-                      sizes="(max-width:768px) 50vw, 240px"
+                      sizes={tab === 'studio' ? '(max-width:768px) 50vw, 760px' : '(max-width:768px) 50vw, 260px'}
                       className="object-cover"
                     />
                   </div>
