@@ -121,8 +121,8 @@ const en = {
     selectOption: 'Select an option',
     // Display labels keyed by the ENGLISH values sent to /api/enquire.
     groupLabels: {
-      'Workspaces': 'Workspaces',
-      'Spaces & studios': 'Spaces & studios',
+      'Workspaces': 'Memberships',
+      'Spaces & studios': 'Space hire & studios',
       'Other': 'Other',
     } as Record<string, string>,
     optionLabels: {
@@ -312,8 +312,8 @@ const zh: BookingDict = {
     enquiringAbout: '我想咨询',
     selectOption: '请选择',
     groupLabels: {
-      'Workspaces': '办公空间',
-      'Spaces & studios': '特色空间与工作室',
+      'Workspaces': '会员方案',
+      'Spaces & studios': '场地与工作室租赁',
       'Other': '其他',
     } as Record<string, string>,
     optionLabels: {

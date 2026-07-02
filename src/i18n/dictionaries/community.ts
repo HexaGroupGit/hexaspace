@@ -107,7 +107,7 @@ const en = {
   tiers: {
     eyebrow: 'Choose your home base',
     title: 'Memberships at a glance.',
-    viewAll: 'View all workspaces',
+    viewAll: 'View all memberships',
     details: 'Details',
   },
   cta: {
@@ -214,7 +214,7 @@ const zh: CommunityDict = {
   tiers: {
     eyebrow: '选择您的主场',
     title: '会员方案一览。',
-    viewAll: '查看全部办公空间',
+    viewAll: '查看全部会员方案',
     details: '了解详情',
   },
   cta: {

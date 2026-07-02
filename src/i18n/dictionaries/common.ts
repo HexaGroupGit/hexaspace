@@ -12,8 +12,8 @@ const en = {
     ogDescription: 'A luxury workspace and members club in Box Hill, Melbourne.',
   },
   nav: {
-    workspaces: 'Workspaces',
-    spaces: 'Spaces',
+    workspaces: 'Memberships',
+    spaces: 'Space Hire',
     community: 'Community',
     merch: 'Merch',
     about: 'About',
@@ -31,8 +31,8 @@ const en = {
     appTitleItalic: 'orchestrated.',
     appBody:
       'A members companion that manages the everyday — bookings, onboarding, correspondence and community — so the work of running your workspace quietly takes care of itself.',
-    colWorkspaces: 'Workspaces',
-    colSpaces: 'Spaces',
+    colWorkspaces: 'Memberships',
+    colSpaces: 'Space Hire',
     colHexa: 'Hexa',
     community: 'Community',
     merch: 'Merch',
@@ -61,8 +61,8 @@ const zh: CommonDict = {
     ogDescription: '坐落于墨尔本博士山的高端办公空间与会员俱乐部。',
   },
   nav: {
-    workspaces: '办公空间',
-    spaces: '特色空间',
+    workspaces: '会员方案',
+    spaces: '场地租赁',
     community: '社区',
     merch: '品牌周边',
     about: '关于我们',
@@ -80,8 +80,8 @@ const zh: CommonDict = {
     appTitleItalic: '从容有序。',
     appBody:
       '一款为会员而生的日常助手 — 预订、入驻、往来事务与社区动态，皆可安心交托，让空间的运营悄然自理。',
-    colWorkspaces: '办公空间',
-    colSpaces: '特色空间',
+    colWorkspaces: '会员方案',
+    colSpaces: '场地租赁',
     colHexa: 'Hexa',
     community: '社区',
     merch: '品牌周边',

@@ -51,7 +51,7 @@ const en = {
       'It’s a short walk from the station, surrounded by some of the city’s best food, and connected — through our Ucommune partnership — to a workspace network that spans the globe.',
     placeImageAlt: 'Hexa Space reception, Box Hill',
     stats: [
-      { value: '5', label: 'Workspace memberships' },
+      { value: '5', label: 'Membership tiers' },
       { value: '6', label: 'Named meeting rooms' },
       { value: '20–100', label: 'Event capacity' },
       { value: 'Global', label: 'Ucommune network' },
@@ -64,10 +64,10 @@ const en = {
   },
 
   workspacesPage: {
-    metaTitle: 'Workspaces — Hexa Space',
+    metaTitle: 'Memberships — Hexa Space',
     metaDescription:
       'Virtual offices, flexible and dedicated desks, private offices and enterprise suites in Box Hill, Melbourne — with transparent pricing and full inclusions.',
-    heroKicker: 'Workspaces',
+    heroKicker: 'Memberships',
     heroTitle: 'Membership, at',
     heroTitleItalic: 'every scale.',
     heroIntro:
@@ -114,10 +114,10 @@ const en = {
   },
 
   spacesPage: {
-    metaTitle: 'Spaces — Hexa Space',
+    metaTitle: 'Space Hire — Hexa Space',
     metaDescription:
       'The Function Space, meeting rooms, media studios and podcast studio at Hexa Space, Box Hill — for events from 20 to 150, meetings from 4 to 26, and broadcast-ready production.',
-    heroKicker: 'The Spaces',
+    heroKicker: 'Space Hire',
     heroTitle: 'A place to host,',
     heroTitleB: 'gather ',
     heroTitleItalic: 'and create.',
@@ -234,7 +234,7 @@ const zh: PagesDict = {
       '距车站仅数步之遥，环绕着全城数一数二的美食，并通过我们与 Ucommune 的合作，连接遍布全球的办公空间网络。',
     placeImageAlt: 'Hexa Space 博士山前台',
     stats: [
-      { value: '5', label: '种办公空间会籍' },
+      { value: '5', label: '种会员方案' },
       { value: '6', label: '间独立命名会议室' },
       { value: '20–100', label: '活动容纳人数' },
       { value: '全球', label: 'Ucommune 网络' },
@@ -247,10 +247,10 @@ const zh: PagesDict = {
   },
 
   workspacesPage: {
-    metaTitle: '办公空间 — Hexa Space',
+    metaTitle: '会员方案 — Hexa Space',
     metaDescription:
       '墨尔本博士山的虚拟办公室、灵活与专属工位、独立办公室及企业定制套间 — 价格透明，配套齐全。',
-    heroKicker: '办公空间',
+    heroKicker: '会员方案',
     heroTitle: '会员方案，',
     heroTitleItalic: '丰俭由人。',
     heroIntro:
@@ -296,10 +296,10 @@ const zh: PagesDict = {
   },
 
   spacesPage: {
-    metaTitle: '特色空间 — Hexa Space',
+    metaTitle: '场地租赁 — Hexa Space',
     metaDescription:
       '博士山 Hexa Space 的多功能活动空间、会议室、影像工作室与播客工作室 — 活动可容纳 20 至 150 位宾客，会议 4 至 26 人，并具备广播级制作能力。',
-    heroKicker: '特色空间',
+    heroKicker: '场地租赁',
     heroTitle: '一处可以待客、',
     heroTitleB: '相聚',
     heroTitleItalic: '与创作的空间。',

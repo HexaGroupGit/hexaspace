@@ -35,7 +35,7 @@ const en = {
     ],
   },
   workspaces: {
-    eyebrow: 'Workspaces',
+    eyebrow: 'Memberships',
     title: 'Membership, at every scale.',
     body: 'From a business address to a private suite — transparent pricing, month-to-month, with every membership including access to the lounge, meeting rooms and members programming.',
     view: 'View membership',
@@ -44,7 +44,7 @@ const en = {
     arrange: 'Arrange a visit',
   },
   spaces: {
-    eyebrow: 'The spaces',
+    eyebrow: 'Space hire',
     title: 'More than desks — a place to host, gather and create.',
     checkAvailability: 'Check availability',
     enquire: 'Enquire',
@@ -139,7 +139,7 @@ const zh: HomeDict = {
     ],
   },
   workspaces: {
-    eyebrow: '办公空间',
+    eyebrow: '会员方案',
     title: '会员方案，丰俭由人。',
     body: '从一个商务地址到一间独立套间 — 价格透明、按月签约，每一种会员均可享用休息室、会议室与会员活动。',
     view: '查看方案',
@@ -148,7 +148,7 @@ const zh: HomeDict = {
     arrange: '安排到访',
   },
   spaces: {
-    eyebrow: '特色空间',
+    eyebrow: '场地租赁',
     title: '不止于工位 — 更是待客、相聚与创作之所。',
     checkAvailability: '查询可预订时段',
     enquire: '咨询',
