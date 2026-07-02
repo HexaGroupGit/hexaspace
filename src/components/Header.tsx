@@ -30,19 +30,19 @@ export default function Header() {
 
   const spaceLinks: NavChild[] = getSpaces(locale).map((s) => ({
     label: s.name,
-    href: `/spaces/${s.slug}`,
+    href: `/space-hire/${s.slug}`,
     meta: s.capacity,
   }));
 
   const workspaceLinks: NavChild[] = getWorkspaces(locale).map((w) => ({
     label: w.name,
-    href: `/workspaces/${w.slug}`,
+    href: `/memberships/${w.slug}`,
     meta: w.price === 'On application' || w.price === '价格面议' ? t.nav.poa : w.price,
   }));
 
   const NAV: NavItem[] = [
-    { label: t.nav.workspaces, href: '/workspaces', children: workspaceLinks },
-    { label: t.nav.spaces, href: '/spaces', children: spaceLinks },
+    { label: t.nav.workspaces, href: '/memberships', children: workspaceLinks },
+    { label: t.nav.spaces, href: '/space-hire', children: spaceLinks },
     { label: t.nav.community, href: '/community' },
     { label: t.nav.merch, href: '/merch' },
     { label: t.nav.about, href: '/about' },
@@ -149,7 +149,9 @@ export default function Header() {
               href={MEMBERS_URL}
               aria-label={t.nav.memberLogin}
               title={t.nav.memberLogin}
-              className="text-hexa-green hover:opacity-70 transition-opacity duration-300"
+              className={`inline-flex h-8 w-8 items-center justify-center rounded-md bg-paper text-hexa-green shadow-sm hover:opacity-80 transition-opacity duration-300 ${
+                solid ? 'border border-ink/15' : ''
+              }`}
             >
               <svg width="17" height="17" viewBox="0 0 14 14" fill="none" aria-hidden>
                 <path

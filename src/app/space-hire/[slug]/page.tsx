@@ -300,7 +300,7 @@ export default async function SpaceDetailPage({
             {others.map((s) => (
               <Link
                 key={s.slug}
-                href={`/spaces/${s.slug}`}
+                href={`/space-hire/${s.slug}`}
                 className="group bg-paper p-7 hover:bg-bone transition-colors"
               >
                 <span className="font-heading uppercase tracking-label text-[11px] text-hexa-green">

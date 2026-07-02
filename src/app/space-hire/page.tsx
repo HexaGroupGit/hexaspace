@@ -93,7 +93,7 @@ export default async function SpacesPage() {
                       </div>
 
                       <div className="mt-9 flex flex-wrap items-center gap-4">
-                        <Link href={`/spaces/${s.slug}`} className="btn">
+                        <Link href={`/space-hire/${s.slug}`} className="btn">
                           {t.viewSpace(s.name)}
                         </Link>
                         {['meeting-rooms', 'media-studios', 'podcast-studio'].includes(s.slug) ? (

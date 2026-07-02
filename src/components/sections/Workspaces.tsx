@@ -33,7 +33,7 @@ export default async function Workspaces() {
         <div className="mt-16 grid gap-px bg-ink/10 md:grid-cols-2 lg:grid-cols-3">
           {tiers.map((w, i) => (
             <Reveal key={w.slug} delay={(i % 3) * 100} className="group bg-paper">
-              <Link href={`/workspaces/${w.slug}`} className="flex h-full flex-col">
+              <Link href={`/memberships/${w.slug}`} className="flex h-full flex-col">
                 <div className="relative aspect-[3/2] overflow-hidden">
                   <Image
                     src={w.img}

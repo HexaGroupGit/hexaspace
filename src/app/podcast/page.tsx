@@ -171,7 +171,7 @@ export default async function PodcastPage() {
                 <EnquireButton interest="The Podcast Studio" className="btn btn-light">
                   {t.bookStudio}
                 </EnquireButton>
-                <Link href="/spaces#podcast-studio" className="btn btn-light border-paper/30">
+                <Link href="/space-hire#podcast-studio" className="btn btn-light border-paper/30">
                   {t.studioDetails}
                 </Link>
               </div>

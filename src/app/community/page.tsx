@@ -215,7 +215,7 @@ export default async function CommunityPage() {
               <p className="eyebrow">{t.tiers.eyebrow}</p>
               <h2 className="h-section mt-6">{t.tiers.title}</h2>
             </div>
-            <Link href="/workspaces" className="btn-ghost">
+            <Link href="/memberships" className="btn-ghost">
               {t.tiers.viewAll}
             </Link>
           </Reveal>
@@ -224,7 +224,7 @@ export default async function CommunityPage() {
             {workspaces.map((w) => (
               <Reveal key={w.slug} className="bg-paper">
                 <Link
-                  href={`/workspaces/${w.slug}`}
+                  href={`/memberships/${w.slug}`}
                   className="group flex h-full flex-col justify-between p-8 hover:bg-bone transition-colors"
                 >
                   <div>

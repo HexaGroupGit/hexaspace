@@ -101,7 +101,7 @@ export default async function WorkspacesPage() {
                     <div className="lg:py-4">
                       <div className="flex items-baseline justify-between gap-6">
                         <Link
-                          href={`/workspaces/${w.slug}`}
+                          href={`/memberships/${w.slug}`}
                           className="group/title inline-flex items-baseline gap-3"
                         >
                           <h2 className="h-section group-hover/title:text-hexa-green transition-colors">
@@ -135,7 +135,7 @@ export default async function WorkspacesPage() {
                         </p>
                         <div className="flex items-center gap-3">
                           <Link
-                            href={`/workspaces/${w.slug}`}
+                            href={`/memberships/${w.slug}`}
                             className="btn-ghost"
                           >
                             {t.viewMembership}

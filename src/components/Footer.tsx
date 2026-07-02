@@ -13,14 +13,14 @@ export default async function Footer() {
       title: t.footer.colWorkspaces,
       links: getWorkspaces(locale).map((w) => ({
         label: w.name,
-        href: `/workspaces#${w.slug}`,
+        href: `/memberships#${w.slug}`,
       })),
     },
     {
       title: t.footer.colSpaces,
       links: getSpaces(locale).map((s) => ({
         label: s.name,
-        href: `/spaces#${s.slug}`,
+        href: `/space-hire#${s.slug}`,
       })),
     },
     {

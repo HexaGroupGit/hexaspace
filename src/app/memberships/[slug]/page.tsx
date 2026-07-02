@@ -220,7 +220,7 @@ export default async function WorkspaceDetailPage({
             {others.map((w) => (
               <Link
                 key={w.slug}
-                href={`/workspaces/${w.slug}`}
+                href={`/memberships/${w.slug}`}
                 className="group bg-paper p-7 hover:bg-bone transition-colors"
               >
                 <span className="font-heading uppercase tracking-label text-[11px] text-hexa-green">

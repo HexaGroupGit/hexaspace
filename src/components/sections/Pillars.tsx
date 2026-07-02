@@ -5,9 +5,9 @@ import { getLocale } from '@/i18n/server';
 import { HOME } from '@/i18n/dictionaries/home';
 
 const PILLAR_META = [
-  { img: '/photos/studio.jpg', href: '/workspaces' },
+  { img: '/photos/studio.jpg', href: '/memberships' },
   { img: '/photos/lounge-2.jpg', href: '/community' },
-  { img: '/photos/atelier-main.jpg', href: '/spaces' },
+  { img: '/photos/atelier-main.jpg', href: '/space-hire' },
 ];
 
 export default async function Pillars() {
