@@ -80,9 +80,13 @@ function imageForName(name: string): string {
   return '/photos/meeting-room.jpg';
 }
 
-function firstInt(s?: string): number | null {
-  const m = (s ?? '').match(/\d+/);
-  return m ? Number(m[0]) : null;
+// People capacity for the "pax" badge. Prefers a numeric capacity, else a size
+// string that clearly counts people ("Up to 8", "4 guests"). Area strings like
+// "90 m²" (Media Studios) are NOT a headcount → null (no badge).
+function paxFrom(capacity?: number, size?: string): number | null {
+  if (typeof capacity === 'number' && capacity > 0) return capacity;
+  const m = (size ?? '').match(/up to\s*(\d+)|(\d+)\s*(?:pax|people|persons?|guests?|seats?)/i);
+  return m ? Number(m[1] ?? m[2]) : null;
 }
 
 const isFunctionSpace = (s: RndSpace) => /function/i.test(s.unitNumber ?? '');
@@ -111,7 +115,7 @@ export async function getBookableResources(): Promise<BookableResource[]> {
         id: s.id,
         name,
         group,
-        pax: s.capacity ?? firstInt(s.size),
+        pax: paxFrom(s.capacity, s.size),
         capacityLabel: s.size ?? (s.capacity ? `Up to ${s.capacity}` : ''),
         rate,
         rateLabel: rate ? `A$${rate} +GST / hr` : 'POA',

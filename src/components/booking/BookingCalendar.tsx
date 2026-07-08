@@ -261,15 +261,19 @@ export default function BookingCalendar({ initialTab = 'meeting' }: { initialTab
                     />
                   </div>
                   <div className="px-3 py-2.5">
-                    <div className="font-heading uppercase tracking-[0.04em] text-[11px] text-ink truncate">
-                      {room.name}
-                    </div>
-                    <div className="mt-1.5 flex items-center gap-2.5">
+                    {/* Name + pax share the title row (pax stays put, name truncates)
+                        so the capacity never overlaps the rate on narrow columns. */}
+                    <div className="flex items-center justify-between gap-2">
+                      <div className="font-heading uppercase tracking-[0.04em] text-[11px] text-ink truncate">
+                        {room.name}
+                      </div>
                       {room.pax != null && (
-                        <span className="inline-flex items-center gap-1 font-heading uppercase tracking-nav text-[9px] text-muted">
+                        <span className="inline-flex items-center gap-1 font-heading uppercase tracking-nav text-[9px] text-muted shrink-0">
                           <PaxIcon /> {room.pax}
                         </span>
                       )}
+                    </div>
+                    <div className="mt-1.5">
                       <span className="font-heading uppercase tracking-nav text-[9px] text-hexa-green">
                         {room.rateLabel === 'POA' ? t.poa : room.rateLabel}
                       </span>
