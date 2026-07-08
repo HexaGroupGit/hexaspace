@@ -86,7 +86,7 @@ export default function BookingCalendar({ initialTab = 'meeting' }: { initialTab
   // Photo size: studios show as 2 wide columns, so give them a much taller image.
   // Header box stays a fixed height (photo + text) so it never scrolls.
   const photoH = tab === 'studio' ? 220 : 112;
-  const headerH = photoH + 52;
+  const headerH = photoH + 62;
 
   // Returning from Stripe Checkout: ?session_id=cs_… (paid) or ?checkout=cancelled.
   // Verify the session server-side, show the confirmation, then clean the URL.
@@ -311,7 +311,7 @@ export default function BookingCalendar({ initialTab = 'meeting' }: { initialTab
                       className="object-cover"
                     />
                   </div>
-                  <div className="px-3 py-2.5">
+                  <div className="px-3.5 py-3">
                     {/* Name + pax share the title row (pax stays put, name truncates)
                         so the capacity never overlaps the rate on narrow columns. */}
                     <div className="flex items-center justify-between gap-2">
@@ -319,13 +319,13 @@ export default function BookingCalendar({ initialTab = 'meeting' }: { initialTab
                         {room.name}
                       </div>
                       {room.pax != null && (
-                        <span className="inline-flex items-center gap-1 font-heading uppercase tracking-nav text-[9px] text-muted shrink-0">
+                        <span className="inline-flex items-center gap-1 font-heading uppercase tracking-nav text-[9px] text-hexa-green shrink-0">
                           <PaxIcon /> {room.pax}
                         </span>
                       )}
                     </div>
-                    <div className="mt-1">
-                      <span className="font-heading uppercase tracking-nav text-[10px] text-ink">
+                    <div className="mt-2">
+                      <span className="font-heading uppercase tracking-nav text-[10px] text-hexa-green">
                         {room.rateLabel === 'POA' ? t.poa : room.rateLabel}
                       </span>
                     </div>
