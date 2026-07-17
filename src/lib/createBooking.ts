@@ -8,7 +8,7 @@
 // ─────────────────────────────────────────────────────────────────────────────
 import type { BookableResource } from '@/data/bookable';
 import { BOOKABLE_RESOURCES } from '@/data/bookable';
-import { getBookableResources, rndConfigured, rndInsert, rndSelect } from './rnd';
+import { getBookableResources, rndConfigured, rndInsert, rndRpc, rndSelect, rndUpdate } from './rnd';
 import { longDate, overlaps, timeLabel, toDec } from './booking';
 
 export const ALL_DAY_DISCOUNT = 0.3; // 30% off all-day public bookings
@@ -22,7 +22,8 @@ type RndBooking = {
   status?: string;
   stripeSessionId?: string;
 };
-type RndMember = { name?: string; email?: string };
+type RndMember = { name?: string; email?: string; companyId?: string };
+type RndTenant = { businessName?: string; email?: string };
 
 export type BookingInput = {
   resourceId: string;
@@ -143,13 +144,68 @@ export async function findBookingBySession(sessionId: string): Promise<BookingRe
   };
 }
 
-async function upsertMember(input: Pick<BookingInput, 'name' | 'email' | 'phone'>, now: string): Promise<string> {
+/**
+ * Find-or-create the drop-in CLIENT (tenants table) for a public booker, and
+ * make sure their member record points at it. Every website booking gets a
+ * client so the invoice below has someone to bill.
+ */
+async function upsertClient(
+  input: Pick<BookingInput, 'name' | 'email' | 'phone' | 'company'>,
+  now: string
+): Promise<string> {
+  // Reuse: a client with this email (drop-in repeat visitor or existing tenant).
+  const existing = await rndSelect<RndTenant>(
+    'tenants',
+    `select=id&data->>email=ilike.${encodeURIComponent(input.email)}`
+  );
+  if (existing.length) return existing[0].id;
+
+  // Or the company their member profile already belongs to.
+  const members = await rndSelect<RndMember>(
+    'members',
+    `select=id,data&data->>email=ilike.${encodeURIComponent(input.email)}`
+  );
+  const linked = members.map((m) => m.data?.companyId).find(Boolean);
+  if (linked) return linked as string;
+
+  const tenantId = `t${Date.now()}_${Math.random().toString(36).slice(2, 6)}`;
+  await rndInsert('tenants', [
+    {
+      id: tenantId,
+      data: {
+        id: tenantId,
+        businessName: input.company || input.name,
+        contactName: input.name,
+        email: input.email,
+        phone: input.phone,
+        status: 'Active',
+        source: 'website-booking',
+        createdAt: now.split('T')[0],
+      },
+      updated_at: now,
+    },
+  ]);
+  return tenantId;
+}
+
+async function upsertMember(
+  input: Pick<BookingInput, 'name' | 'email' | 'phone'>,
+  companyId: string,
+  now: string
+): Promise<string> {
   try {
     const existing = await rndSelect<RndMember>(
       'members',
-      `select=id&data->>email=ilike.${encodeURIComponent(input.email)}`
+      `select=id,data&data->>email=ilike.${encodeURIComponent(input.email)}`
     );
-    if (existing.length) return existing[0].id;
+    if (existing.length) {
+      const m = existing[0];
+      // Adopt the drop-in client on members that aren't linked to a company yet.
+      if (companyId && !m.data?.companyId) {
+        await rndUpdate('members', m.id, { ...m.data, companyId }).catch(() => {});
+      }
+      return m.id;
+    }
     const memberId = `m${Date.now()}`;
     await rndInsert('members', [
       {
@@ -159,7 +215,7 @@ async function upsertMember(input: Pick<BookingInput, 'name' | 'email' | 'phone'
           name: input.name,
           email: input.email,
           phone: input.phone,
-          companyId: '',
+          companyId,
           status: 'Drop In',
           credits: 0,
           createdAt: now.split('T')[0],
@@ -173,6 +229,84 @@ async function upsertMember(input: Pick<BookingInput, 'name' | 'email' | 'phone'
     console.error('member upsert failed (continuing)', e);
     return '';
   }
+}
+
+/**
+ * Raise the platform invoice for a website booking so it shows in Billing.
+ * unitPrice is ex-GST (the platform adds 10% via vatEnabled — the inc-GST
+ * total matches what Stripe charged). Stripe-paid bookings record the payment
+ * (method 'stripe', same shape as api/stripe/webhook.js) and land as paid;
+ * unpaid reserves land as pending, due on the booking date.
+ */
+async function createBookingInvoice(args: {
+  input: BookingInput;
+  resource: BookableResource;
+  fee: number;
+  payment: PaymentDetails;
+  tenantId: string;
+  bookingId: string;
+  reference: string;
+  now: string;
+}): Promise<string> {
+  const { input, resource, fee, payment, tenantId, bookingId, reference, now } = args;
+  const today = now.split('T')[0];
+  const monthStart = `${input.date.slice(0, 7)}-01`;
+  const monthEnd = new Date(Number(input.date.slice(0, 4)), Number(input.date.slice(5, 7)), 0)
+    .toISOString()
+    .split('T')[0];
+  const paid = payment.paidBy === 'stripe';
+  const number = (await rndRpc<string>('next_invoice_number')) || `INV-W${Date.now()}`;
+
+  const invoiceId = `inv${Date.now()}_${Math.random().toString(36).slice(2, 6)}`;
+  const invoice = {
+    id: invoiceId,
+    number,
+    tenantId,
+    leaseId: null,
+    bookingId,
+    status: paid ? 'paid' : 'pending',
+    sentStatus: 'not_sent',
+    source: 'website-booking',
+    issueDate: today,
+    // Unpaid reserves are due on the booking day (or today if booked same-day).
+    dueDate: paid || input.date < today ? today : input.date,
+    periodStart: monthStart,
+    periodEnd: monthEnd,
+    reference,
+    paymentMethod: '',
+    discountPct: 0,
+    vatEnabled: true,
+    xeroSync: false,
+    isProrated: false,
+    currency: 'AUD',
+    invoiceType: null,
+    lineItems: [
+      {
+        id: `${invoiceId}_li0`,
+        description: `${resource.name} Booking — ${input.date} ${input.startTime}–${input.endTime} (ref ${reference})`,
+        revenueAccount: 'Additional Services',
+        unitPrice: fee,
+        qty: 1,
+        discountPct: 0,
+      },
+    ],
+    payments: paid
+      ? [
+          {
+            id: `pay_stripe_${(payment.stripeSessionId ?? invoiceId).slice(-10)}`,
+            amount: payment.paidAmount ?? Math.round(fee * 1.1 * 100) / 100,
+            date: today,
+            method: 'stripe',
+            reference: payment.stripePaymentIntentId ?? payment.stripeSessionId ?? '',
+          },
+        ]
+      : [],
+    comments: [],
+    creditNoteForId: null,
+    createdAt: today,
+  };
+  await rndInsert('invoices', [{ id: invoiceId, data: invoice, updated_at: now }]);
+  return invoiceId;
 }
 
 export type PaymentDetails = {
@@ -197,9 +331,30 @@ export async function insertBooking(
 ): Promise<BookingRecord> {
   const now = new Date().toISOString();
   const reference = makeReference();
-  const memberId = await upsertMember(input, now);
+
+  // Drop-in client + member profile — both best-effort: a hiccup here must
+  // never lose a booking (especially one that's already been paid).
+  let tenantId = '';
+  try {
+    tenantId = await upsertClient(input, now);
+  } catch (e) {
+    console.error('client upsert failed (continuing)', e);
+  }
+  const memberId = await upsertMember(input, tenantId, now);
 
   const id = `bk${Date.now()}_${Math.random().toString(36).slice(2, 6)}`;
+
+  // Platform invoice — paid (Stripe) or pending (unpaid reserve). Free/POA
+  // slots (fee 0) have nothing to bill.
+  let invoiceId = '';
+  if (tenantId && fee > 0) {
+    try {
+      invoiceId = await createBookingInvoice({ input, resource, fee, payment, tenantId, bookingId: id, reference, now });
+    } catch (e) {
+      console.error('booking invoice failed (continuing)', e);
+    }
+  }
+
   const notes = [input.description, payment.noteSuffix].filter(Boolean).join('\n');
   const booking = {
     id,
@@ -208,7 +363,7 @@ export async function insertBooking(
     resourceName: resource.name,
     memberId,
     memberName: input.name,
-    companyId: '',
+    companyId: tenantId,
     companyName: input.company,
     date: input.date,
     startTime: input.startTime,
@@ -223,6 +378,7 @@ export async function insertBooking(
     ...(payment.paidAmount != null ? { paidAmount: payment.paidAmount } : {}),
     ...(payment.stripeSessionId ? { stripeSessionId: payment.stripeSessionId } : {}),
     ...(payment.stripePaymentIntentId ? { stripePaymentIntentId: payment.stripePaymentIntentId } : {}),
+    ...(invoiceId ? { invoiceId } : {}),
     repeat: 'none',
     title: input.title || `${resource.name} — ${input.name}`,
     notes,
