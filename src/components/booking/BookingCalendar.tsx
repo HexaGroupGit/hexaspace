@@ -376,10 +376,19 @@ export default function BookingCalendar({ initialTab = 'meeting' }: { initialTab
                   {/* trailing box under 5 PM (not bookable) */}
                   <div style={{ height: HOUR_H }} className="border-b border-ink/5" />
 
-                  {/* Existing bookings — blocked */}
+                  {/* Existing bookings — blocked. Clamped to the visible 9–5
+                      grid: a 7am (or midnight all-day) booking must not paint
+                      over the header or the whole page — only the part that
+                      overlaps opening hours renders; fully out-of-hours
+                      bookings are hidden. */}
                   {roomBookings.map((b, i) => {
-                    const top = (toDec(b.startTime) - DAY_START) * HOUR_H;
-                    const height = Math.max(22, (toDec(b.endTime) - toDec(b.startTime)) * HOUR_H);
+                    const start = toDec(b.startTime);
+                    const end = toDec(b.endTime);
+                    if (end <= DAY_START || start >= DAY_END) return null;
+                    const s = Math.max(start, DAY_START);
+                    const e = Math.min(end, DAY_END);
+                    const top = (s - DAY_START) * HOUR_H;
+                    const height = Math.max(22, (e - s) * HOUR_H);
                     return (
                       <div
                         key={`${b.startTime}-${i}`}

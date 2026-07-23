@@ -140,8 +140,9 @@ export async function getBookableResources(): Promise<BookableResource[]> {
 
     const resources = spaces.map((s): BookableResource => {
       const name = s.unitNumber ?? 'Room';
-      let rate = s.hourlyRate || s.rate || null;
-      if (/east/i.test(name)) rate = 120; // East (Chinese Tearoom) — premium rate
+      // Rates come straight from the RND space records (single source of truth
+      // — East's premium $120 now lives on the space, not hardcoded here).
+      const rate = s.hourlyRate || s.rate || null;
       const group: BookableGroup = s.type === 'meeting' ? 'meeting' : 'studio';
       return {
         id: s.id,
