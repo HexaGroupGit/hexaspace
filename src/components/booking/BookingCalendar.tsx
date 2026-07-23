@@ -242,7 +242,7 @@ export default function BookingCalendar({ initialTab = 'meeting' }: { initialTab
                       : 'border-ink/15 text-muted hover:bg-bone hover:text-ink'
                   }`}
                 >
-                  {t.floorLabel(id)}
+                  {tab === 'studio' ? t.studioFloorLabel(id) : t.floorLabel(id)}
                 </button>
               ))}
             </div>
