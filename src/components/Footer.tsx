@@ -4,6 +4,14 @@ import { getSpaces, getWorkspaces } from '@/data/content';
 import { getLocale } from '@/i18n/server';
 import { COMMON } from '@/i18n/dictionaries/common';
 
+// The live Hexa Space accounts. Canonical profile URLs only — no tracking or
+// locale query strings, which break when shared and look untidy on hover.
+const SOCIALS = [
+  { name: 'Instagram', href: 'https://www.instagram.com/hexaspace.coworking/' },
+  { name: 'LinkedIn', href: 'https://www.linkedin.com/company/hexa-space/' },
+  { name: 'Facebook', href: 'https://www.facebook.com/hexaspacecoworking/' },
+];
+
 export default async function Footer() {
   const locale = await getLocale();
   const t = COMMON[locale];
@@ -113,14 +121,16 @@ export default async function Footer() {
             {t.footer.legal.replace('{year}', String(new Date().getFullYear()))}
           </p>
           <div className="flex gap-6">
-            {['Instagram', 'LinkedIn', 'Facebook'].map((s) => (
-              <Link
-                key={s}
-                href="#"
+            {SOCIALS.map((s) => (
+              <a
+                key={s.name}
+                href={s.href}
+                target="_blank"
+                rel="noopener noreferrer"
                 className="font-heading uppercase tracking-nav text-[10px] text-paper/40 hover:text-paper transition-colors"
               >
-                {s}
-              </Link>
+                {s.name}
+              </a>
             ))}
           </div>
         </div>
