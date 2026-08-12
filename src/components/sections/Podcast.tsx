@@ -15,7 +15,7 @@ export default async function Podcast() {
           {/* Image side — crossfades into the dark background on its right/bottom edge */}
           <div className="relative aspect-[4/5] md:aspect-[4/5] lg:aspect-[3/4] overflow-hidden">
             <Image
-              src="/photos/podcast-studio.jpg"
+              src="/photos/podcast-mic.jpg"
               alt={t.imageAlt}
               fill
               sizes="(max-width:768px) 100vw, 50vw"
