@@ -31,7 +31,6 @@ const RECORDING_VALUES = [
   'Interview',
   'Solo / monologue',
   'Video podcast',
-  'Remote guest',
   'Other',
 ] as const;
 // Studio hours are 9–5; the last useful start is 4pm for a one-hour session.

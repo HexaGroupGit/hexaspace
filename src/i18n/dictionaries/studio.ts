@@ -140,7 +140,7 @@ const en = {
       specialRequirements: 'Anything else we should set up?',
       optional: 'optional',
     },
-    recordingTypes: ['Interview', 'Solo / monologue', 'Video podcast', 'Remote guest', 'Other'],
+    recordingTypes: ['Interview', 'Solo / monologue', 'Video podcast', 'Other'],
     // Plain strings, not functions: this whole block is handed to a Client
     // Component, and functions can't be serialized across that boundary.
     // {n} / {mins} / {want} / {have} / {ref} are filled in by the form.
@@ -302,7 +302,7 @@ const zh: StudioDict = {
       specialRequirements: '还有其他需要我们准备的吗？',
       optional: '选填',
     },
-    recordingTypes: ['访谈', '个人口播', '视频播客', '远程连线嘉宾', '其他'],
+    recordingTypes: ['访谈', '个人口播', '视频播客', '其他'],
     hourOne: '1 小时',
     hourMany: '{n} 小时',
     yes: '是',
