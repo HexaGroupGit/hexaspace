@@ -53,7 +53,17 @@ export default function BookingCalendar({ initialTab = 'meeting' }: { initialTab
   const dayStr = ymd(day);
 
   // Rooms in the active tab, and the floors they span (for the Level filter).
-  const tabResources = useMemo(() => allResources.filter((r) => r.group === tab), [allResources, tab]);
+  // Request-only spaces (the podcast studio) never appear as a bookable column
+  // — they are staff-operated and go through /podcast-studio instead. They are
+  // surfaced as a link below the grid so the tab doesn't just look empty.
+  const tabResources = useMemo(
+    () => allResources.filter((r) => r.group === tab && !r.requestOnly),
+    [allResources, tab]
+  );
+  const requestOnlyHere = useMemo(
+    () => allResources.filter((r) => r.group === tab && r.requestOnly),
+    [allResources, tab]
+  );
   const floors = useMemo(() => {
     const order = ['l2', 'l4', 'l5'];
     const present = [...new Set(tabResources.map((r) => r.floor).filter(Boolean))] as string[];
@@ -409,6 +419,25 @@ export default function BookingCalendar({ initialTab = 'meeting' }: { initialTab
           })}
         </div>
       </div>
+
+      {/* Staff-operated spaces — surfaced, but sent to their own request flow. */}
+      {requestOnlyHere.length > 0 && (
+        <div className="mt-8 border border-ink/15 bg-bone px-6 py-6 md:px-8 md:py-7 flex flex-wrap items-center justify-between gap-5">
+          <div className="max-w-xl">
+            <p className="font-heading uppercase tracking-nav text-[11px] text-ink">
+              {requestOnlyHere.map((r) => r.name).join(' · ')}
+            </p>
+            <p className="text-[14px] leading-relaxed text-muted mt-2">
+              {locale === 'zh'
+                ? '播客录音室由我们的团队全程操作，因此无法即时预订。请提交申请，我们会在一个工作日内确认。'
+                : 'The podcast studio is run by our team, so it can’t be booked instantly. Send a request and we’ll confirm within one business day.'}
+            </p>
+          </div>
+          <a href="/podcast-studio#request" className="btn">
+            {locale === 'zh' ? '预约录制' : 'Request a session'}
+          </a>
+        </div>
+      )}
 
       {payReturn && payReturn.status !== 'cancelled' && (
         <PaymentReturnOverlay state={payReturn} onClose={() => setPayReturn(null)} />

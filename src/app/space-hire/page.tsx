@@ -98,7 +98,13 @@ export default async function SpacesPage() {
                         </Link>
                         {['meeting-rooms', 'media-studios', 'podcast-studio'].includes(s.slug) ? (
                           <Link
-                            href={s.slug === 'meeting-rooms' ? '/book' : '/book?tab=studio'}
+                            href={
+                              s.slug === 'meeting-rooms'
+                                ? '/book'
+                                : s.slug === 'podcast-studio'
+                                  ? '/podcast-studio#request'
+                                  : '/book?tab=studio'
+                            }
                             className="btn-ghost self-center"
                           >
                             {s.bookingLabel}

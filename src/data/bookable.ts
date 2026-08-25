@@ -24,6 +24,13 @@ export type BookableResource = {
   rate: number | null;
   rateLabel: string;
   image: string;
+  /**
+   * Staff-operated: cannot be booked from the public calendar at all. The
+   * podcast studio needs an operator rostered, a pre-session questionnaire and
+   * a policy acceptance, so it goes through /podcast-studio instead. The write
+   * endpoints refuse it as well — the flag is not just a UI hint.
+   */
+  requestOnly?: boolean;
 };
 
 /** Pull the first integer out of a string like "Up to 8 guests" → 8. */
@@ -72,6 +79,7 @@ const studios: BookableResource[] = [mediaSpace, podcastSpace]
     rate: null, // studios are POA — priced per project until Stripe rates are set
     rateLabel: 'POA',
     image: s.gallery?.[0] ?? s.image,
+    requestOnly: s.slug === 'podcast-studio',
   }));
 
 export const BOOKABLE_RESOURCES: BookableResource[] = [...meetingRooms, ...studios];

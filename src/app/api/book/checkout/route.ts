@@ -30,6 +30,19 @@ export async function POST(req: NextRequest) {
 
   const resource = await resolveResource(input.resourceId);
   if (!resource) return NextResponse.json({ error: 'Unknown room.' }, { status: 400 });
+  // The podcast studio is staff-operated: it needs an operator rostered, the
+  // pre-session questionnaire and a policy acceptance, none of which this
+  // endpoint collects. Refuse it here so the flag can't be bypassed by posting
+  // the resource id directly.
+  if (resource.requestOnly) {
+    return NextResponse.json(
+      {
+        error: 'The podcast studio is booked by request — please use the request form at /podcast-studio.',
+        requestOnly: true,
+      },
+      { status: 400 }
+    );
+  }
 
   const fee = computeFee(resource, input);
   if (fee <= 0 || !(await paymentsEnabled())) {

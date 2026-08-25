@@ -30,7 +30,9 @@ export default function Header() {
 
   const spaceLinks: NavChild[] = getSpaces(locale).map((s) => ({
     label: s.name,
-    href: `/space-hire/${s.slug}`,
+    // The podcast studio has its own page — it carries policies and a
+    // request-to-book flow rather than the generic space-hire template.
+    href: s.slug === 'podcast-studio' ? '/podcast-studio' : `/space-hire/${s.slug}`,
     meta: s.capacity,
   }));
 

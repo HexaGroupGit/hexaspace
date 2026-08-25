@@ -140,6 +140,9 @@ export async function getBookableResources(): Promise<BookableResource[]> {
 
     const resources = spaces.map((s): BookableResource => {
       const name = s.unitNumber ?? 'Room';
+      // Podcast rooms are staff-operated — request-to-book, never instant, even
+      // if an hourly rate is later set on the space record.
+      const requestOnly = s.type === 'podcast' || /podcast/i.test(name);
       // Rates come straight from the RND space records (single source of truth
       // — East's premium $120 now lives on the space, not hardcoded here).
       const rate = s.hourlyRate || s.rate || null;
@@ -151,9 +154,12 @@ export async function getBookableResources(): Promise<BookableResource[]> {
         floor: floorOf(s),
         pax: paxFrom(s.capacity, s.size),
         capacityLabel: s.size ?? (s.capacity ? `Up to ${s.capacity}` : ''),
-        rate,
-        rateLabel: rate ? `A$${rate} +GST / hr` : 'POA',
+        // A request-only studio is never quoted a public hourly rate — pricing
+        // is confirmed with the session, so the calendar can't imply pay-now.
+        rate: requestOnly ? null : rate,
+        rateLabel: requestOnly ? 'By request' : rate ? `A$${rate} +GST / hr` : 'POA',
         image: s.image || imageForName(name),
+        requestOnly,
       };
     });
 

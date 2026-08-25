@@ -48,7 +48,12 @@ export default async function SpaceDetailPage({
 
   // Meeting rooms + studios are bookable online; the function space stays enquiry-based.
   const bookable = ['meeting-rooms', 'media-studios', 'podcast-studio'].includes(space.slug);
-  const bookHref = space.slug === 'meeting-rooms' ? '/book' : '/book?tab=studio';
+  const bookHref =
+    space.slug === 'meeting-rooms'
+      ? '/book'
+      : space.slug === 'podcast-studio'
+        ? '/podcast-studio#request'
+        : '/book?tab=studio';
 
   // East (the Chinese Tearoom) is featured full-width on top; the rest fill the grid.
   // In zh the room's name/alt are swapped, so match either field.

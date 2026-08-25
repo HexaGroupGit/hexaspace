@@ -13,6 +13,9 @@ const nextConfig = {
       { source: '/workspaces/:path*', destination: '/memberships/:path*', permanent: true },
       { source: '/spaces', destination: '/space-hire', permanent: true },
       { source: '/spaces/:path*', destination: '/space-hire/:path*', permanent: true },
+      // The podcast studio has its own page (policies + request-to-book flow),
+      // so the generic space-hire template no longer serves it.
+      { source: '/space-hire/podcast-studio', destination: '/podcast-studio', permanent: true },
     ];
   },
 };

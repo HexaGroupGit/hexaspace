@@ -28,7 +28,7 @@ export default async function Footer() {
       title: t.footer.colSpaces,
       links: getSpaces(locale).map((s) => ({
         label: s.name,
-        href: `/space-hire#${s.slug}`,
+        href: s.slug === 'podcast-studio' ? '/podcast-studio' : `/space-hire#${s.slug}`,
       })),
     },
     {
