@@ -190,9 +190,19 @@ export default function StudioRequestForm({ t, endpoint }: Props) {
           </select>
         </div>
         <div>
-          <label className={label} htmlFor="sr-people">{t.fields.peopleOnCamera}</label>
-          <input id="sr-people" type="number" min={1} max={4} className={input}
-            value={f.peopleOnCamera} onChange={(e) => set('peopleOnCamera', Number(e.target.value))} />
+          <span className={label}>{t.fields.peopleOnCamera}</span>
+          {/* Two microphones, so two people — a spinner that silently refuses a
+              third is worse than not offering one. */}
+          <div className="flex gap-2">
+            {[1, 2].map((n) => (
+              <button key={n} type="button" onClick={() => set('peopleOnCamera', n)}
+                className={`flex-1 font-heading uppercase tracking-nav text-[11px] px-3 py-3 border transition-colors ${
+                  f.peopleOnCamera === n ? 'bg-ink text-paper border-ink' : 'border-ink/15 text-ink hover:bg-bone'}`}>
+                {n}
+              </button>
+            ))}
+          </div>
+          <p className="text-[13px] text-muted mt-2 leading-relaxed">{t.fields.peopleOnCameraHelp}</p>
         </div>
         <div className="sm:col-span-2">
           <label className={label} htmlFor="sr-mins">{t.fields.expectedRecordingMins}</label>

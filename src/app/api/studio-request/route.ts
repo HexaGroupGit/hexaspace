@@ -39,7 +39,7 @@ export async function POST(req: NextRequest) {
     startTime: str(body.startTime),
     hours: Math.max(1, Math.min(8, num(body.hours) || 1)),
     recordingType: str(body.recordingType),
-    peopleOnCamera: Math.max(1, Math.min(4, num(body.peopleOnCamera) || 1)),
+    peopleOnCamera: Math.max(1, Math.min(2, num(body.peopleOnCamera) || 1)),
     expectedRecordingMins: num(body.expectedRecordingMins),
     ownCrew: bool(body.ownCrew),
     ownCards: bool(body.ownCards),

@@ -131,6 +131,8 @@ const en = {
       hours: 'How long do you need the studio?',
       recordingType: 'What are you recording?',
       peopleOnCamera: 'People on camera',
+      peopleOnCameraHelp:
+        'The studio is set up for a host and one guest — two microphones, two camera angles. Talk to us first if you need more.',
       expectedRecordingMins: 'Expected recording length (minutes)',
       ownCrew: 'Bringing your own camera or audio operator?',
       ownCards: 'Bringing your own SD cards?',
@@ -292,6 +294,7 @@ const zh: StudioDict = {
       hours: '您需要使用录音室多久？',
       recordingType: '录制类型',
       peopleOnCamera: '出镜人数',
+      peopleOnCameraHelp: '录音室按主持人加一位嘉宾配置 — 两支麦克风、两个机位。如需更多人出镜，请先与我们联系。',
       expectedRecordingMins: '预期录制时长（分钟）',
       ownCrew: '是否自带摄影或音频操作人员？',
       ownCards: '是否自带 SD 存储卡？',
