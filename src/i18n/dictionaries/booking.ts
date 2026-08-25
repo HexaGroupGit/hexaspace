@@ -29,10 +29,14 @@ const en = {
     paidDone: 'Done',
     confirmError:
       'We couldn’t verify the payment automatically. If you were charged, email info@hexaspace.com.au and we’ll sort it out immediately.',
-    tabs: { meeting: 'Meeting Rooms', studio: 'Studios' },
+    tabs: { meeting: 'Meeting Rooms', studio: 'Photography Studios', podcast: 'Podcast Room' },
     floorLabel: (id: string) => ({ l2: 'Level 2', l4: 'Level 4', l5: 'Level 5' }[id] ?? id),
     // Studios tab: the floor split IS the studio type — name them directly.
     studioFloorLabel: (id: string) => ({ l2: 'Podcast Studio', l5: 'Media Studio' }[id] ?? id),
+    podcastTitle: 'The Podcast Studio is booked by request',
+    podcastBody:
+      'The studio is run by our team, so it can’t be booked instantly — an operator is rostered for every session. Tell us about your recording and we’ll confirm within one business day.',
+    podcastCta: 'Request a session',
     spacesCount: (n: number) => `${n} ${n === 1 ? 'space' : 'spaces'}`,
     checking: 'checking availability…',
     clickToBook: 'click an open slot to book',
@@ -242,10 +246,14 @@ const zh: BookingDict = {
     paidWhen: '时间',
     paidDone: '完成',
     confirmError: '我们暂时无法自动核实这笔付款。若您已被扣款，请发送邮件至 info@hexaspace.com.au，我们会立即为您处理。',
-    tabs: { meeting: '会议室', studio: '工作室' },
+    tabs: { meeting: '会议室', studio: '摄影工作室', podcast: '播客录音室' },
     floorLabel: (id: string) => ({ l2: '2 楼', l4: '4 楼', l5: '5 楼' }[id] ?? id),
     // 工作室页签：楼层即工作室类型，直接以名称显示。
     studioFloorLabel: (id: string) => ({ l2: '播客工作室', l5: '媒体工作室' }[id] ?? id),
+    podcastTitle: '播客录音室采用申请制',
+    podcastBody:
+      '录音室由我们的团队全程操作，因此无法即时预订 — 每场录制都需安排操作员。请告知您的录制需求，我们将在一个工作日内确认。',
+    podcastCta: '预约录制',
     spacesCount: (n: number) => `${n} 个空间`,
     checking: '正在查询可预订时段…',
     clickToBook: '点击空闲时段即可预订',

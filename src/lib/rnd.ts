@@ -146,7 +146,8 @@ export async function getBookableResources(): Promise<BookableResource[]> {
       // Rates come straight from the RND space records (single source of truth
       // — East's premium $120 now lives on the space, not hardcoded here).
       const rate = s.hourlyRate || s.rate || null;
-      const group: BookableGroup = s.type === 'meeting' ? 'meeting' : 'studio';
+      const group: BookableGroup =
+        s.type === 'meeting' ? 'meeting' : requestOnly ? 'podcast' : 'studio';
       return {
         id: s.id,
         name,

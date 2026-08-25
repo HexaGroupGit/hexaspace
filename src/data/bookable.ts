@@ -6,7 +6,10 @@
 // ─────────────────────────────────────────────────────────────────────────────
 import { SPACES } from './content';
 
-export type BookableGroup = 'meeting' | 'studio';
+// The podcast room is its own tab, not a kind of studio: it books differently
+// (request-to-book, staff-operated) so mixing it into the studio grid invites
+// exactly the confusion the request flow exists to prevent.
+export type BookableGroup = 'meeting' | 'studio' | 'podcast';
 
 export type BookableResource = {
   /** slug id — used to match the RND space (server resolves to the real space id). */
@@ -73,7 +76,7 @@ const studios: BookableResource[] = [mediaSpace, podcastSpace]
   .map((s) => ({
     id: `studio-${s.slug}`,
     name: s.name,
-    group: 'studio' as const,
+    group: (s.slug === 'podcast-studio' ? 'podcast' : 'studio') as BookableGroup,
     pax: firstInt(s.capacity),
     capacityLabel: s.capacity,
     rate: null, // studios are POA — priced per project until Stripe rates are set
@@ -86,7 +89,8 @@ export const BOOKABLE_RESOURCES: BookableResource[] = [...meetingRooms, ...studi
 
 export const BOOKABLE_TABS: { key: BookableGroup; label: string }[] = [
   { key: 'meeting', label: 'Meeting Rooms' },
-  { key: 'studio', label: 'Studios' },
+  { key: 'studio', label: 'Photography Studios' },
+  { key: 'podcast', label: 'Podcast Room' },
 ];
 
 /** Operating hours shown on the calendar (matches the RND portal: 9am–5pm). */

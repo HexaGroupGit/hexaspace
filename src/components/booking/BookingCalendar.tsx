@@ -282,7 +282,37 @@ export default function BookingCalendar({ initialTab = 'meeting' }: { initialTab
         </div>
       </div>
 
-      {/* Calendar grid */}
+      {/* The podcast tab has no grid: the studio is staff-operated, so there is
+          nothing here to click. Showing an availability calendar for a resource
+          you cannot self-book is the exact confusion the request flow exists to
+          prevent — so the tab carries the explanation and a way through. */}
+      {requestOnlyHere.length > 0 && resources.length === 0 ? (
+        <div className="mt-8 border border-ink/10 bg-paper overflow-hidden">
+          <div className="relative aspect-[21/9] w-full">
+            <Image
+              src={requestOnlyHere[0].image}
+              alt=""
+              fill
+              sizes="(max-width:768px) 100vw, 900px"
+              className="object-cover"
+            />
+          </div>
+          <div className="px-6 py-8 md:px-10 md:py-10 text-center">
+            <p className="font-heading uppercase tracking-nav text-[11px] text-hexa-green">
+              {requestOnlyHere.map((r) => r.name).join(' · ')}
+            </p>
+            <h3 className="h-display text-[clamp(1.5rem,3vw,2.2rem)] mt-4">{t.podcastTitle}</h3>
+            <p className="text-[15px] leading-relaxed text-muted mt-4 mx-auto max-w-xl">
+              {t.podcastBody}
+            </p>
+            <a href="/podcast-studio#request" className="btn mt-8 inline-block">
+              {t.podcastCta}
+            </a>
+          </div>
+        </div>
+      ) : (
+
+      /* Calendar grid */
       <div className="mt-8 border border-ink/10 bg-paper">
         <div className="flex">
           {/* Time gutter */}
@@ -419,24 +449,6 @@ export default function BookingCalendar({ initialTab = 'meeting' }: { initialTab
           })}
         </div>
       </div>
-
-      {/* Staff-operated spaces — surfaced, but sent to their own request flow. */}
-      {requestOnlyHere.length > 0 && (
-        <div className="mt-8 border border-ink/15 bg-bone px-6 py-6 md:px-8 md:py-7 flex flex-wrap items-center justify-between gap-5">
-          <div className="max-w-xl">
-            <p className="font-heading uppercase tracking-nav text-[11px] text-ink">
-              {requestOnlyHere.map((r) => r.name).join(' · ')}
-            </p>
-            <p className="text-[14px] leading-relaxed text-muted mt-2">
-              {locale === 'zh'
-                ? '播客录音室由我们的团队全程操作，因此无法即时预订。请提交申请，我们会在一个工作日内确认。'
-                : 'The podcast studio is run by our team, so it can’t be booked instantly. Send a request and we’ll confirm within one business day.'}
-            </p>
-          </div>
-          <a href="/podcast-studio#request" className="btn">
-            {locale === 'zh' ? '预约录制' : 'Request a session'}
-          </a>
-        </div>
       )}
 
       {payReturn && payReturn.status !== 'cancelled' && (

@@ -139,22 +139,24 @@ const en = {
       optional: 'optional',
     },
     recordingTypes: ['Interview', 'Solo / monologue', 'Video podcast', 'Remote guest', 'Other'],
-    hourOptions: (n: number) => (n === 1 ? '1 hour' : `${n} hours`),
+    // Plain strings, not functions: this whole block is handed to a Client
+    // Component, and functions can't be serialized across that boundary.
+    // {n} / {mins} / {want} / {have} / {ref} are filled in by the form.
+    hourOne: '1 hour',
+    hourMany: '{n} hours',
     yes: 'Yes',
     no: 'No',
     filesNote:
       'You’ll leave with raw footage — multi-camera video and multi-track audio, copied and verified before you go. Bring a USB drive or portable SSD if you can.',
-    fitsNote: (mins: number) =>
-      `That leaves about ${mins} minutes of recording once setup and file handover are allowed for.`,
-    tooShort: (want: number, have: number) =>
-      `${want} minutes of recording won’t fit — this booking allows about ${have}. Add another hour, or shorten the recording.`,
+    fitsNote: 'That leaves about {mins} minutes of recording once setup and file handover are allowed for.',
+    tooShort: '{want} minutes of recording won’t fit — this booking allows about {have}. Add another hour, or shorten the recording.',
     policyAccept: 'I have read and agree to the studio policies above.',
     submit: 'Request session',
     submitting: 'Sending…',
     successTitle: 'Request received.',
     successBody:
       'Your slot is held while we confirm an operator — we’ll come back to you within one business day. Nothing has been charged. Check your inbox for a confirmation of what you asked for.',
-    successRef: (ref: string) => `Reference ${ref}`,
+    successRef: 'Reference {ref}',
     errorGeneric: 'Something went wrong sending your request. Please try again, or email info@hexaspace.com.au.',
     required: 'Please fill in the required fields.',
   },
@@ -298,21 +300,21 @@ const zh: StudioDict = {
       optional: '选填',
     },
     recordingTypes: ['访谈', '个人口播', '视频播客', '远程连线嘉宾', '其他'],
-    hourOptions: (n: number) => `${n} 小时`,
+    hourOne: '1 小时',
+    hourMany: '{n} 小时',
     yes: '是',
     no: '否',
     filesNote:
       '您将带走原始素材 — 多机位视频与多轨音频，离开前已完成复制与校验。如有条件，请自备 U 盘或移动固态硬盘。',
-    fitsNote: (mins: number) => `扣除前期准备与文件交接后，约剩余 ${mins} 分钟的实际录制时间。`,
-    tooShort: (want: number, have: number) =>
-      `${want} 分钟的录制时长不够 — 该时段约可录制 ${have} 分钟。请增加一小时，或缩短录制时长。`,
+    fitsNote: '扣除前期准备与文件交接后，约剩余 {mins} 分钟的实际录制时间。',
+    tooShort: '{want} 分钟的录制时长不够 — 该时段约可录制 {have} 分钟。请增加一小时，或缩短录制时长。',
     policyAccept: '我已阅读并同意上述录音室规定。',
     submit: '提交申请',
     submitting: '提交中…',
     successTitle: '已收到您的申请。',
     successBody:
       '我们已为您保留该时段，正在安排操作员 — 将在一个工作日内回复您。目前尚未产生任何费用。请查收邮件确认申请内容。',
-    successRef: (ref: string) => `编号 ${ref}`,
+    successRef: '编号 {ref}',
     errorGeneric: '提交时出现问题，请重试，或发送邮件至 info@hexaspace.com.au。',
     required: '请填写必填项。',
   },

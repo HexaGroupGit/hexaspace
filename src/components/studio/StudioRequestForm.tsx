@@ -12,6 +12,14 @@ import type { StudioDict } from '@/i18n/dictionaries/studio';
 
 type Props = { t: StudioDict['request']; endpoint: string };
 
+// The dictionary hands us plain strings (functions can't cross the
+// server→client boundary), so the placeholders are filled in here.
+const fill = (template: string, vars: Record<string, string | number>) =>
+  Object.entries(vars).reduce(
+    (out, [k, v]) => out.split(`{${k}}`).join(String(v)),
+    template
+  );
+
 const HOURS = [1, 2, 3, 4];
 
 // The values POSTed for "what are you recording". These are the canonical
@@ -100,7 +108,7 @@ export default function StudioRequestForm({ t, endpoint }: Props) {
         </span>
         <h3 className="h-display text-[clamp(1.6rem,3vw,2.4rem)] mt-6">{t.successTitle}</h3>
         <p className="lead mt-4 mx-auto max-w-xl">{t.successBody}</p>
-        {reference && <p className="eyebrow mt-6">{t.successRef(reference)}</p>}
+        {reference && <p className="eyebrow mt-6">{fill(t.successRef, { ref: reference })}</p>}
       </div>
     );
   }
@@ -162,11 +170,11 @@ export default function StudioRequestForm({ t, endpoint }: Props) {
             <button key={h} type="button" onClick={() => set('hours', h)}
               className={`font-heading uppercase tracking-nav text-[11px] px-5 py-3 border transition-colors ${
                 f.hours === h ? 'bg-ink text-paper border-ink' : 'border-ink/15 text-ink hover:bg-bone'}`}>
-              {t.hourOptions(h)}
+              {h === 1 ? t.hourOne : fill(t.hourMany, { n: h })}
             </button>
           ))}
         </div>
-        <p className="text-[13px] text-muted mt-3 leading-relaxed">{t.fitsNote(available)}</p>
+        <p className="text-[13px] text-muted mt-3 leading-relaxed">{fill(t.fitsNote, { mins: available })}</p>
       </div>
 
       <hr className="border-ink/10 my-8" />
@@ -192,7 +200,7 @@ export default function StudioRequestForm({ t, endpoint }: Props) {
             value={f.expectedRecordingMins} onChange={(e) => set('expectedRecordingMins', Number(e.target.value))} />
           {tooShort && (
             <p className="text-[13px] text-[#8A6A1B] bg-[#F3E9CF] border border-[#E4D3A4] px-4 py-3 mt-3 leading-relaxed">
-              {t.tooShort(Number(f.expectedRecordingMins), available)}
+              {fill(t.tooShort, { want: Number(f.expectedRecordingMins), have: available })}
             </p>
           )}
         </div>
