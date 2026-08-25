@@ -59,7 +59,7 @@ export default function StudioRequestForm({ t, endpoint }: Props) {
     name: '', email: '', phone: '', businessName: '',
     date: '', startTime: '10:00', hours: 1,
     recordingType: '', peopleOnCamera: 2, expectedRecordingMins: 15,
-    ownCrew: false, ownCards: false, transferHelp: true,
+    ownCrew: false, transferHelp: true,
     specialRequirements: '',
     website: '', // honeypot
   });
@@ -215,10 +215,9 @@ export default function StudioRequestForm({ t, endpoint }: Props) {
         </div>
       </div>
 
-      <div className="grid gap-5 sm:grid-cols-3 mt-5">
+      <div className="grid gap-5 sm:grid-cols-2 mt-5">
         {([
           ['ownCrew', t.fields.ownCrew],
-          ['ownCards', t.fields.ownCards],
           ['transferHelp', t.fields.transferHelp],
         ] as const).map(([key, text]) => (
           <div key={key}>

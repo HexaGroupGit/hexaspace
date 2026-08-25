@@ -42,7 +42,7 @@ export async function POST(req: NextRequest) {
     peopleOnCamera: Math.max(1, Math.min(2, num(body.peopleOnCamera) || 1)),
     expectedRecordingMins: num(body.expectedRecordingMins),
     ownCrew: bool(body.ownCrew),
-    ownCards: bool(body.ownCards),
+    // ownCards is settled in the pre-booking call, not on the form.
     transferHelp: body.transferHelp !== false,
     specialRequirements: str(body.specialRequirements).slice(0, 2000),
     deliverables: 'raw' as const,

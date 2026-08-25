@@ -135,7 +135,6 @@ const en = {
         'The studio is set up for a host and one guest — two microphones, two camera angles. Talk to us first if you need more.',
       expectedRecordingMins: 'Expected recording length (minutes)',
       ownCrew: 'Bringing your own camera or audio operator?',
-      ownCards: 'Bringing your own SD cards?',
       transferHelp: 'Would you like help transferring the files?',
       specialRequirements: 'Anything else we should set up?',
       optional: 'optional',
@@ -149,7 +148,7 @@ const en = {
     yes: 'Yes',
     no: 'No',
     filesNote:
-      'You’ll leave with raw footage — multi-camera video and multi-track audio, copied and verified before you go. Bring a USB drive or portable SSD if you can.',
+      'You’ll leave with raw footage — multi-camera video and multi-track audio, copied and verified before you go. Please bring a drive with room to spare: an hour of recording is roughly 300 GB, about 100 GB per camera. An SSD is much faster than a USB stick.',
     fitsNote: 'That leaves about {mins} minutes of recording once setup and file handover are allowed for.',
     tooShort: '{want} minutes of recording won’t fit — this booking allows about {have}. Add another hour, or shorten the recording.',
     policyAccept: 'I have read and agree to the studio policies above.',
@@ -297,7 +296,6 @@ const zh: StudioDict = {
       peopleOnCameraHelp: '录音室按主持人加一位嘉宾配置 — 两支麦克风、两个机位。如需更多人出镜，请先与我们联系。',
       expectedRecordingMins: '预期录制时长（分钟）',
       ownCrew: '是否自带摄影或音频操作人员？',
-      ownCards: '是否自带 SD 存储卡？',
       transferHelp: '是否需要协助传输文件？',
       specialRequirements: '还有其他需要我们准备的吗？',
       optional: '选填',
@@ -308,7 +306,7 @@ const zh: StudioDict = {
     yes: '是',
     no: '否',
     filesNote:
-      '您将带走原始素材 — 多机位视频与多轨音频，离开前已完成复制与校验。如有条件，请自备 U 盘或移动固态硬盘。',
+      '您将带走原始素材 — 多机位视频与多轨音频，离开前已完成复制与校验。请自备容量充足的硬盘：一小时的录制约产生 300 GB 数据（每台摄影机约 100 GB）。移动固态硬盘的传输速度远快于普通 U 盘。',
     fitsNote: '扣除前期准备与文件交接后，约剩余 {mins} 分钟的实际录制时间。',
     tooShort: '{want} 分钟的录制时长不够 — 该时段约可录制 {have} 分钟。请增加一小时，或缩短录制时长。',
     policyAccept: '我已阅读并同意上述录音室规定。',
