@@ -168,6 +168,8 @@ export default function TourModal({ open, onClose }: { open: boolean; onClose: (
                 </label>
               </div>
               <p className="prose-body text-[12px] -mt-1">{t.hoursNote}</p>
+              {/* Says plainly that picking a time here is a request, not a booking. */}
+              <p className="prose-body text-[12px] -mt-2 opacity-70">{t.confirmNote}</p>
 
               <label className="block">
                 <span className="eyebrow">{t.anythingOpt}</span>
