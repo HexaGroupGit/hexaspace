@@ -80,7 +80,7 @@ export const WORKSPACES: Workspace[] = [
   {
     slug: 'flexible-desk',
     name: 'Flexible Desk',
-    price: 'From $350',
+    price: 'From $450',
     unit: '/ month',
     tagline: 'Work anywhere on the floor, around the clock.',
     description:
@@ -120,7 +120,7 @@ export const WORKSPACES: Workspace[] = [
   {
     slug: 'dedicated-desk',
     name: 'Dedicated Desk',
-    price: 'From $500',
+    price: 'From $650',
     unit: '/ month',
     tagline: 'Your own desk, exactly as you left it.',
     description:
