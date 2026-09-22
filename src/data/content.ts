@@ -360,7 +360,7 @@ export const SPACES: Space[] = [
         name: 'West',
         alt: '西 Xi',
         capacity: 'Up to 6 guests',
-        price: '$80 +GST / hour',
+        price: '$60 +GST / hour',
         image: '/photos/room-west.jpg',
         features: [
           'Boardroom table seating up to six, with laptop-ready desks',

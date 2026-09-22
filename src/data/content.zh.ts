@@ -322,7 +322,7 @@ export const ZH_ROOMS: Record<string, RoomZh> = {
     name: '西',
     alt: 'West',
     capacity: '最多 6 位宾客',
-    price: '$80 +GST/小时',
+    price: '$60 +GST/小时',
     features: [
       '可容纳六人的董事会议桌，桌面便于使用笔记本电脑',
       '先进的演示与视频会议系统',
