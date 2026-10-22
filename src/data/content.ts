@@ -64,15 +64,15 @@ export const WORKSPACES: Workspace[] = [
       },
       {
         title: 'A room when you need one',
-        copy: 'Book meeting rooms and the function space at member rates, pay only for what you use, and meet clients somewhere that reflects your business.',
+        copy: 'Book meeting rooms and the function space whenever you need them, pay only for what you use, and meet clients somewhere that reflects your business. Virtual Office Plus members book at member rates.',
       },
     ],
     inclusions: [
       'Prestigious Level 4, 830 Whitehorse Road business address',
       'Use of address for ASIC & business registration',
       'Mail & parcel receipt and handling',
-      'Pay-as-you-go meeting room access at member rates',
-      'Discounted event & studio hire',
+      'Pay-as-you-go meeting room, event & studio hire',
+      'Member rates on rooms, events & studios with Virtual Office Plus',
       'Invitations to member community events',
     ],
     gallery: ['/photos/reception.jpg', '/photos/lounge.jpg', '/photos/view-north.jpg'],
